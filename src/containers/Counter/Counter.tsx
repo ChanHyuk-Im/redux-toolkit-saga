@@ -9,7 +9,7 @@ const CounterContainer = () => {
   const step = useSelector(selectStep);
 
   const handleClickMinusAsync = () => {
-    store.dispatch(minusCounterAsync());
+    store.dispatch(minusCounterAsync()); // store.dispatch <- 이 부분 깔끔하게 분리할 방법 추천 부탁드립니다!
   };
 
   const handleClickMinus = () => {
