@@ -1,38 +1,44 @@
-import { State, Action } from './counter.types';
-import actions from './counter.actions';
+import { Reducer } from 'redux';
+import { CounterState } from './counter.types';
+import { counterActions } from './counter.actions';
+import { ActionTypes } from '../types';
 
-const initialState: State = {
+const initialState: CounterState = {
   value: 0,
   step: 1,
+  status: 'init',
 };
 
-export const counterReducer = (state: State = initialState, action: Action) => {
-  console.log('state:', state, ', action:', action);
+export const counterReducer: Reducer<CounterState, ActionTypes<typeof counterActions>> = (
+  state = initialState,
+  action,
+): CounterState => {
+  console.log(action);
   switch (action.type) {
-    case actions.PLUS_COUNTER:
+    case counterActions.plusCounter.type:
       return {
         ...state,
         value: state.value + state.step,
       };
-    case actions.MINUS_COUNTER:
+    case counterActions.minusCounter.type:
       return {
         ...state,
         value: state.value - state.step,
       };
-    case actions.RESET_COUNTER:
+    case counterActions.resetCounter.type:
       return {
         ...state,
         value: 0,
       };
-    case actions.SET_VALUE:
+    case counterActions.setValue.type:
       return {
         ...state,
-        value: action.payload ?? 0,
+        value: action.payload as number ?? 0,
       };
-    case actions.SET_STEP:
+    case counterActions.setStep.type:
       return {
         ...state,
-        step: action.payload ?? 1,
+        step: action.payload as number ?? 1,
       };
     default:
       return state;

@@ -1,45 +1,54 @@
 import { useSelector } from 'react-redux';
 import { selectValue, selectStep } from '../../store/counter/counter.selectors';
-import { plusCounter, minusCounter, resetCounter, setStep, plusCounterAsync, minusCounterAsync, fetchCounterValue } from '../../store/counter/counter.actions';
-import store from '../../store';
+import { counterActions } from '../../store/counter/counter.actions';
+import { useAction } from '../../store/hooks';
 import { Button, Input, Text } from '../../components/Counter';
 
 const CounterContainer = () => {
+  const plusCounter = useAction(counterActions.plusCounter);
+  const minusCounter = useAction(counterActions.minusCounter);
+  const resetCounter = useAction(counterActions.resetCounter);
+  const setStep = useAction(counterActions.setStep);
+
+  const plusCounterAsync = useAction(counterActions.plusCounterAsync.request);
+  const minusCounterAsync = useAction(counterActions.minusCounterAsync.request);
+  const fetchCounterValue = useAction(counterActions.fetchCounterValue.request);
+
   const value = useSelector(selectValue);
   const step = useSelector(selectStep);
 
   const handleClickMinusAsync = () => {
-    store.dispatch(minusCounterAsync()); // store.dispatch <- 이 부분 깔끔하게 분리할 방법 추천 부탁드립니다!
+    minusCounterAsync();
   };
 
   const handleClickMinus = () => {
-    store.dispatch(minusCounter());
+    minusCounter();
   };
 
   const handleClickReset = () => {
-    store.dispatch(resetCounter());
+    resetCounter();
   };
 
   const handleClickPlus = () => {
-    store.dispatch(plusCounter());
+    plusCounter();
   };
 
   const handleClickPlusAsync = () => {
-    store.dispatch(plusCounterAsync());
+    plusCounterAsync();
   };
 
   const handleChangeStep = (value: string) => {
     const numberedValue = Number(value);
 
     if (isNaN(numberedValue)) {
-      store.dispatch(setStep(1));
+      setStep(1);
     } else {
-      store.dispatch(setStep(numberedValue));
+      setStep(numberedValue);
     }
   };
 
   const handleClickResetByRandomValue = () => {
-    store.dispatch(fetchCounterValue());
+    fetchCounterValue();
   };
 
   return (

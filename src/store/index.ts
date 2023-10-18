@@ -1,17 +1,15 @@
+import { combineReducers } from 'redux';
 import { configureStore } from '@reduxjs/toolkit';
 import createSagaMiddleware from 'redux-saga';
 import { all } from 'redux-saga/effects';
+import { ApplicationState } from './types';
 import { counterReducer } from './counter/counter.reducer';
-import { State as CounterState } from './counter/counter.types';
 import counterSagas from './counter/counter.sagas';
+import { isDev } from '../common/env';
 
-export interface RootState {
-  counter: CounterState;
-}
-
-const rootReducer = {
+const rootReducer = combineReducers<ApplicationState>({
   counter: counterReducer,
-};
+});
 
 function* rootSaga() {
   yield all([
@@ -23,9 +21,13 @@ const sagaMiddleware = createSagaMiddleware();
 
 const store = configureStore({
   reducer: rootReducer,
-  middleware: [
+  middleware: (getDefaultMiddleware) => [
+    ...getDefaultMiddleware({
+      thunk: false,
+    }),
     sagaMiddleware,
   ],
+  devTools: isDev,
 });
 
 sagaMiddleware.run(rootSaga);

@@ -1,4 +1,4 @@
-import { RootState } from '../index';
+import { ApplicationState } from '../types';
 
-export const selectValue = (state: RootState) => state.counter.value;
-export const selectStep = (state: RootState) => state.counter.step;
+export const selectValue = (state: ApplicationState) => state.counter.value;
+export const selectStep = (state: ApplicationState) => state.counter.step;

@@ -1,9 +1,5 @@
-export interface State {
+export interface CounterState {
   value: number;
   step: number;
-}
-
-export interface Action {
-  type: string;
-  payload?: number;
+  status: string;
 }
