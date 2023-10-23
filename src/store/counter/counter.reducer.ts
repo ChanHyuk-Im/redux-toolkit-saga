@@ -2,6 +2,7 @@ import { Reducer } from 'redux';
 import { CounterState } from './counter.types';
 import { counterActions } from './counter.actions';
 import { ActionTypes } from '../types';
+import {createReducer} from "@reduxjs/toolkit";
 
 const initialState: CounterState = {
   value: 0,
@@ -9,38 +10,20 @@ const initialState: CounterState = {
   status: 'init',
 };
 
-export const counterReducer: Reducer<CounterState, ActionTypes<typeof counterActions>> = (
-  state = initialState,
-  action,
-): CounterState => {
-  console.log(action);
-  switch (action.type) {
-    case counterActions.plusCounter.type:
-      return {
-        ...state,
-        value: state.value + state.step,
-      };
-    case counterActions.minusCounter.type:
-      return {
-        ...state,
-        value: state.value - state.step,
-      };
-    case counterActions.resetCounter.type:
-      return {
-        ...state,
-        value: 0,
-      };
-    case counterActions.setValue.type:
-      return {
-        ...state,
-        value: action.payload as number ?? 0,
-      };
-    case counterActions.setStep.type:
-      return {
-        ...state,
-        step: action.payload as number ?? 1,
-      };
-    default:
-      return state;
-  }
-};
+export const counterReducer : Reducer<CounterState, ActionTypes<typeof counterActions>> = createReducer(initialState, (builder) => {
+  builder.addCase(counterActions.plusCounter, (state) => {
+    state.value = state.value + state.step;
+  });
+  builder.addCase(counterActions.minusCounter, (state) => {
+    state.value = state.value - state.step;
+  });
+  builder.addCase(counterActions.resetCounter, (state) => {
+    state.value = 0;
+  });
+  builder.addCase(counterActions.setValue, (state, action) => {
+    state.value = action.payload as number ?? 0;
+  });
+  builder.addCase(counterActions.setStep, (state, action) => {
+    state.step = action.payload as number ?? 1;
+  });
+});
